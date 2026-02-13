@@ -1,0 +1,138 @@
+index.html
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIP Age Calculator</title>
+
+<style>
+body{
+    margin:0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg,#141e30,#243b55);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    color:white;
+}
+
+.card{
+    backdrop-filter: blur(15px);
+    background: rgba(255,255,255,0.08);
+    border-radius:25px;
+    padding:35px;
+    width:350px;
+    box-shadow:0 0 40px rgba(0,0,0,0.6);
+    text-align:center;
+}
+
+h1{
+    margin-bottom:20px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border-radius:12px;
+    border:none;
+    font-size:16px;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    margin-top:15px;
+    border:none;
+    border-radius:15px;
+    background:linear-gradient(45deg,#ff512f,#dd2476);
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover{
+    transform:scale(1.05);
+}
+
+.result{
+    margin-top:20px;
+    font-size:15px;
+    line-height:1.7;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+<h1>🎂 VIP Age Calculator</h1>
+
+<input type="number" id="day" placeholder="دن (1-31)">
+<input type="number" id="month" placeholder="مہینہ (1-12)">
+<input type="number" id="year" placeholder="سال (مثلاً 2000)">
+
+<button onclick="calculateAge()">عمر معلوم کریں</button>
+
+<div class="result" id="result"></div>
+</div>
+
+<script>
+function calculateAge(){
+
+let d = parseInt(document.getElementById("day").value);
+let m = parseInt(document.getElementById("month").value);
+let y = parseInt(document.getElementById("year").value);
+
+if(isNaN(d) || isNaN(m) || isNaN(y)){
+    document.getElementById("result").innerHTML = "براہ کرم مکمل تاریخ درج کریں";
+    return;
+}
+
+let birthDate = new Date(y, m-1, d);
+let today = new Date();
+
+if(birthDate > today){
+    document.getElementById("result").innerHTML = "مستقبل کی تاریخ درست نہیں";
+    return;
+}
+
+let years = today.getFullYear() - birthDate.getFullYear();
+let months = today.getMonth() - birthDate.getMonth();
+let days = today.getDate() - birthDate.getDate();
+
+if(days < 0){
+    months--;
+    let lastMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+    days += lastMonth.getDate();
+}
+
+if(months < 0){
+    years--;
+    months += 12;
+}
+
+let totalDays = Math.floor((today - birthDate)/(1000*60*60*24));
+
+let nextBirthday = new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+if(nextBirthday < today){
+    nextBirthday.setFullYear(today.getFullYear()+1);
+}
+
+let daysLeft = Math.ceil((nextBirthday - today)/(1000*60*60*24));
+
+document.getElementById("result").innerHTML =
+"🎉 آپ کی عمر ہے:<br><br>" +
+"🟢 " + years + " سال<br>" +
+"🟡 " + months + " مہینے<br>" +
+"🔵 " + days + " دن<br><br>" +
+"📅 کل دن: " + totalDays + "<br><br>" +
+"🎂 اگلی سالگرہ: " + nextBirthday.toDateString() + "<br>" +
+"⏳ باقی دن: " + daysLeft + " دن";
+}
+</script>
+
+</body>
+</html>
